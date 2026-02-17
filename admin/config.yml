@@ -1,7 +1,7 @@
 backend:
   name: git-gateway
   branch: main
-  site_domain: "https://silver-gumdrop-574bce.netlify.app/"  # <--- LÄGG TILL DENNA!
+  site_domain: "silver-gumdrop-574bce.netlify.app" # <-- OBS! Ingen https:// och inget / på slutet
 
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
@@ -32,4 +32,5 @@ collections:
               - {label: "Datum", name: "date", widget: "date"}
 
               - {label: "Ladda upp PDF", name: "pdf", widget: "file"}
+
 
