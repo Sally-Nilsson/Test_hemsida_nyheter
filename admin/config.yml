@@ -1,7 +1,7 @@
 backend:
   name: git-gateway
   branch: main
-  site_domain: "https://sally-nilsson.github.io/Test_hemsida_nyheter"  # <--- LÄGG TILL DENNA!
+  site_domain: "https://silver-gumdrop-574bce.netlify.app/"  # <--- LÄGG TILL DENNA!
 
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
@@ -32,3 +32,4 @@ collections:
               - {label: "Datum", name: "date", widget: "date"}
 
               - {label: "Ladda upp PDF", name: "pdf", widget: "file"}
+
