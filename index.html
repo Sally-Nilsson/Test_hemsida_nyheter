@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mitt Företag</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    
+    <style>
+        /* Lite enkel CSS så det ser vettigt ut */
+        body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .news-item { border-bottom: 1px solid #ccc; padding: 10px 0; }
+        .date { color: #666; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+    <h1>Välkommen</h1>
+
+    <h2>Senaste Nytt</h2>
+    <div id="news-container">Laddar nyheter...</div>
+
+    <h2>Mötesprotokoll</h2>
+    <ul id="protokoll-container">Laddar protokoll...</ul>
+
+    <script>
+        // Funktion för att hämta och visa data
+        async function loadContent() {
+            try {
+                // Hämta JSON-filen (cache-busting med timestamp för att se ändringar direkt)
+                const response = await fetch('content.json?t=' + new Date().getTime());
+                if (!response.ok) throw new Error("Kunde inte hämta data");
+                
+                const data = await response.json();
+
+                // 1. Rendera Nyheter
+                const newsContainer = document.getElementById('news-container');
+                newsContainer.innerHTML = ''; // Töm laddningstext
+                
+                // Sortera nyheter (nyast först) om de finns
+                if (data.news && data.news.length > 0) {
+                    const sortedNews = data.news.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    
+                    sortedNews.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'news-item';
+                        // OBS: Decap sparar markdown. För enkelhetens skull kör vi plain text här.
+                        // Vill du ha fetstil/länkar i texten behöver du ett bibliotek som "marked.js".
+                        div.innerHTML = `
+                            <h3>${item.title}</h3>
+                            <span class="date">${new Date(item.date).toLocaleDateString('sv-SE')}</span>
+                            <p>${item.body}</p> 
+                        `;
+                        newsContainer.appendChild(div);
+                    });
+                } else {
+                    newsContainer.innerHTML = "<p>Inga nyheter än.</p>";
+                }
+
+                // 2. Rendera Protokoll
+                const protoContainer = document.getElementById('protokoll-container');
+                protoContainer.innerHTML = '';
+
+                if (data.protokoll && data.protokoll.length > 0) {
+                    const sortedProto = data.protokoll.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                    sortedProto.forEach(item => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <strong>${item.date.split("T")[0]}: ${item.title}</strong> 
+                            ${item.pdf ? `<a href="${item.pdf}" target="_blank">📄 Ladda ner PDF</a>` : ''}
+                        `;
+                        protoContainer.appendChild(li);
+                    });
+                } else {
+                    protoContainer.innerHTML = "<li>Inga protokoll uppladdade.</li>";
+                }
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById('news-container').innerText = "Kunde inte ladda innehåll.";
+            }
+        }
+
+        // Kör igång!
+        loadContent();
+
+        // Netlify Identity redirect logic
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
