@@ -4,10 +4,60 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Content Manager</title>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  
+  <script>
+    // 3. Manuell initiering för att tvinga rätt domän
+    CMS.init({
+      config: {
+        backend: {
+          name: 'git-gateway',
+          branch: 'main',
+          // Här tvingar vi CMS:et att prata med rätt Netlify-sida:
+          site_domain: 'silver-gumdrop-574bce.netlify.app' 
+        },
+        media_folder: "assets/uploads",
+        public_folder: "/assets/uploads",
+        collections: [
+          {
+            name: "data",
+            label: "Innehåll",
+            files: [
+              {
+                name: "all_content",
+                label: "Hantera Innehåll",
+                file: "content.json",
+                fields: [
+                  {
+                    name: "news",
+                    label: "Nyheter",
+                    widget: "list",
+                    fields: [
+                      {label: "Titel", name: "title", widget: "string"},
+                      {label: "Datum", name: "date", widget: "datetime"},
+                      {label: "Text", name: "body", widget: "markdown"}
+                    ]
+                  },
+                  {
+                    name: "protokoll",
+                    label: "Mötesprotokoll",
+                    widget: "list",
+                    fields: [
+                      {label: "Mötesnamn", name: "title", widget: "string"},
+                      {label: "Datum", name: "date", widget: "date"},
+                      {label: "Ladda upp PDF", name: "pdf", widget: "file"}
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    });
+  </script>
 </body>
 </html>
