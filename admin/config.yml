@@ -1,7 +1,7 @@
 backend:
-  name: github
+  name: git-gateway
   branch: main
-  repo: sally-nilsson.github.io/Test_hemsida_nyheter
+  site_domain: silver-gumdrop-574bce.netlify.app
 
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
