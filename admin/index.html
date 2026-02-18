@@ -1,11 +1,69 @@
+<!doctype html>
 <html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Content Manager</title>
+  
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-  <!-- Include the script that builds the page and powers Decap CMS -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
+
+  <script>
+    // 1. Tvinga Netlify Identity att prata med rätt server
+    window.netlifyIdentityOptions = {
+      APIUrl: 'https://silver-gumdrop-574bce.netlify.app/.netlify/identity'
+    };
+
+    // 2. Definiera hela konfigurationen här istället för i config.yml
+    var manualConfig = {
+      backend: {
+        name: 'git-gateway',
+        branch: 'main',
+        site_domain: 'silver-gumdrop-574bce.netlify.app' // Här tvingar vi in rätt adress
+      },
+      media_folder: "assets/uploads",
+      public_folder: "/assets/uploads",
+      collections: [
+        {
+          name: "data",
+          label: "Innehåll",
+          files: [
+            {
+              name: "all_content",
+              label: "Hantera Innehåll",
+              file: "content.json",
+              fields: [
+                {
+                   name: "news",
+                   label: "Nyheter",
+                   widget: "list",
+                   fields: [
+                     {label: "Titel", name: "title", widget: "string"},
+                     {label: "Datum", name: "date", widget: "datetime"},
+                     {label: "Text", name: "body", widget: "markdown"}
+                   ]
+                },
+                {
+                   name: "protokoll",
+                   label: "Mötesprotokoll",
+                   widget: "list",
+                   fields: [
+                     {label: "Mötesnamn", name: "title", widget: "string"},
+                     {label: "Datum", name: "date", widget: "date"},
+                     {label: "Ladda upp PDF", name: "pdf", widget: "file"}
+                   ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+
+    // 3. Starta CMS:et med den manuella konfigurationen
+    CMS.init({ config: manualConfig });
+  </script>
 </body>
 </html>
