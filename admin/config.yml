@@ -1,8 +1,7 @@
 backend:
-  name: git-gateway
+  name: github
   branch: main
-  # Detta säger åt CMS:et att prata med Netlify för inloggning
-  site_domain: silver-gumdrop-574bce.netlify.app
+  repo: sally-nilsson.github.io/Test_hemsida_nyheter
 
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
